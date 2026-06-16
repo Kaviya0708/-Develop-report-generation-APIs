@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Generator</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            margin: 40px;
+        }
+
+        input{
+            width: 250px;
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button{
+            padding: 10px;
+        }
+
+        #report{
+            margin-top: 20px;
+            border: 1px solid black;
+            padding: 15px;
+            width: 400px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Generate Report</h2>
+
+<input type="text" id="name"
+placeholder="Employee Name"><br>
+
+<input type="text" id="department"
+placeholder="Department"><br>
+
+<input type="number" id="sales"
+placeholder="Total Sales"><br><br>
+
+<button onclick="generateReport()">
+Generate Report
+</button>
+
+<div id="report">
+
+    <h3>Report Details</h3>
+
+    <p><b>Report ID:</b>
+    <span id="reportId"></span></p>
+
+    <p><b>Name:</b>
+    <span id="employeeName"></span></p>
+
+    <p><b>Department:</b>
+    <span id="dept"></span></p>
+
+    <p><b>Total Sales:</b>
+    <span id="totalSales"></span></p>
+
+    <p><b>Date:</b>
+    <span id="date"></span></p>
+
+    <p><b>Status:</b>
+    <span id="status"></span></p>
+
+</div>
+
+<script>
+
+async function generateReport(){
+
+    const data = {
+        name:
+        document.getElementById("name").value,
+
+        department:
+        document.getElementById("department").value,
+
+        sales:
+        document.getElementById("sales").value
+    };
+
+    const response =
+    await fetch(
+    "http://localhost:3000/generate-report",
+    {
+        method: "POST",
+
+        headers: {
+            "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify(data)
+    });
+
+    const report =
+    await response.json();
+
+    document.getElementById("report").style.display =
+    "block";
+
+    document.getElementById("reportId").innerText =
+    report.reportId;
+
+    document.getElementById("employeeName").innerText =
+    report.employeeName;
+
+    document.getElementById("dept").innerText =
+    report.department;
+
+    document.getElementById("totalSales").innerText =
+    report.totalSales;
+
+    document.getElementById("date").innerText =
+    report.generatedDate;
+
+    document.getElementById("status").innerText =
+    report.status;
+}
+</script>
+
+</body>
+</html>
